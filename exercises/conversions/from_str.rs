@@ -10,7 +10,6 @@ struct Person {
     age: usize,
 }
 
-// I AM NOT DONE
 // Steps:
 // 1. If the length of the provided string is 0, then return an error
 // 2. Split the given string on the commas present in it
@@ -21,6 +20,17 @@ struct Person {
 impl FromStr for Person {
     type Err = String;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        let mut iter = s.split(",");
+        match (
+            iter.next(),
+            iter.next().and_then(|v| v.parse::<usize>().ok()),
+        ) {
+            (Some(name), Some(age)) => Ok(Person {
+                name: String::from(name),
+                age,
+            }),
+            _ => Err(String::from("Malformed input")),
+        }
     }
 }
 
